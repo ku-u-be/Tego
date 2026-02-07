@@ -15,7 +15,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      overflow: hidden; /* serca bez scrolla */
+      overflow: hidden;
     }
 
     .container {
@@ -28,7 +28,6 @@
       margin-bottom: 30px;
     }
 
-    /* więcej miejsca, żeby rosnący TAK nie zakrywał NIE */
     .buttons {
       position: relative;
       height: 360px;
@@ -47,7 +46,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* TAK ma niższy z-index, żeby NIE było zawsze widoczne */
     #yes {
       background: #2ecc71;
       color: white;
@@ -59,7 +57,6 @@
       z-index: 1;
     }
 
-    /* NIE zawsze nad TAK (aż do 10 kliknięcia) */
     #no {
       background: #e74c3c;
       color: white;
@@ -72,7 +69,6 @@
 
     .hidden { display: none; }
 
-    /* FULLSCREEN YES po 10 klikach */
     #yes.fullscreen {
       position: fixed;
       inset: 0;
@@ -88,7 +84,6 @@
       z-index: 9999;
     }
 
-    /* Lecące serduszka */
     .heart {
       position: fixed;
       bottom: -10vh;
@@ -106,7 +101,6 @@
       100% { transform: translateX(var(--dx)) translateY(-120vh) scale(1.6); opacity: 0; }
     }
 
-    /* GIF na końcu */
     .final-gif {
       width: 85%;
       max-width: 320px;
@@ -130,7 +124,6 @@
   <div class="container hidden" id="page2">
     <h1>WOOOO!! Kocham Cię 🥰❤️</h1>
 
-    <!-- GIF: wrzuć plik masło.gif do repo obok index.html -->
     <img class="final-gif" src="IMG_2072.gif" alt="masło gif" />
 
     <p>Najlepsza decyzja ever 😘</p>
@@ -142,25 +135,25 @@
 
   const noTexts = [
     "Na pewno?",
-    "Ej no 😢",
-    "Proszęęę 🥺",
-    "No weź 😭",
+    "Ej no",
+    "Proszęęę",
+    "No weź",
     "Serio mówisz „nie”?",
-    "Daj mi szansę 💘",
+    "Daj mi szansę",
     "Kliknij TAK, proszę 🙏",
-    "Będę grzeczny 😇",
-    "Nie łam mi serca 💔",
+    "Będę grzeczny",
+    "Nie łam mi serca",
     "Jeszcze raz pomyśl 🤔",
-    "Uśmiechnij się i kliknij TAK 😊",
-    "To tylko jeden klik 😏",
-    "Obiecuję, że warto 💖",
-    "Chociaż malutkie TAK? 🥹",
-    "Nie bądź taka/taki twarda/y 😅",
-    "Zrób to dla mnie 😘",
-    "Dobra, to może TAK? 😄",
+    "Uśmiechnij się i kliknij TAK",
+    "To tylko jeden klik",
+    "Obiecuję, że warto ❤️",
+    "Chociaż malutkie TAK?",
+    "Nie bądź taka twarda",
+    "Zrób to dla mnie",
+    "Dobra, to może TAK?",
     "A może jednak…? 🙃",
-    "Nie uciekaj mi 😭",
-    "Kliknij zielone, proszę 💚"
+    "Nie uciekaj mi",
+    "Kliknij zielone, proszę"
   ];
 
   function clamp(n, min, max) {
