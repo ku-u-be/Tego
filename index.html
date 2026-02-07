@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Walentynki 💖</title>
+  <title>Walentyki 💖</title>
 
   <style>
     body {
@@ -15,7 +15,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      overflow: hidden; /* żeby serca nie robiły scrolla */
+      overflow: hidden; /* serca bez scrolla */
     }
 
     .container {
@@ -28,9 +28,10 @@
       margin-bottom: 30px;
     }
 
+    /* więcej miejsca, żeby rosnący TAK nie zakrywał NIE */
     .buttons {
       position: relative;
-      height: 220px;
+      height: 360px;
       max-width: 420px;
       margin: 0 auto;
     }
@@ -46,22 +47,27 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* TAK ma niższy z-index, żeby NIE było zawsze widoczne */
     #yes {
       background: #2ecc71;
       color: white;
       font-size: 22px;
       transition: transform 0.2s;
-      position: relative;
-      z-index: 2;
+      position: absolute;
+      left: 30px;
+      top: 40px;
+      z-index: 1;
     }
 
+    /* NIE zawsze nad TAK (aż do 10 kliknięcia) */
     #no {
       background: #e74c3c;
       color: white;
       position: absolute;
-      right: 20px;
-      top: 120px;
-      z-index: 1;
+      left: 220px;
+      top: 200px;
+      z-index: 3;
+      white-space: nowrap;
     }
 
     .hidden { display: none; }
@@ -85,19 +91,28 @@
     /* Lecące serduszka */
     .heart {
       position: fixed;
-      left: 50%;
       bottom: -10vh;
       font-size: 24px;
       pointer-events: none;
       animation: floatUp 2.4s linear forwards;
       z-index: 99999;
       filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15));
+      opacity: 0;
     }
 
     @keyframes floatUp {
       0%   { transform: translateX(0) translateY(0) scale(0.9); opacity: 0; }
       10%  { opacity: 1; }
       100% { transform: translateX(var(--dx)) translateY(-120vh) scale(1.6); opacity: 0; }
+    }
+
+    /* GIF na końcu */
+    .final-gif {
+      width: 85%;
+      max-width: 320px;
+      margin: 18px auto 10px;
+      display: block;
+      border-radius: 20px;
     }
   </style>
 </head>
@@ -114,6 +129,10 @@
 
   <div class="container hidden" id="page2">
     <h1>WOOOO!! Kocham Cię 🥰❤️</h1>
+
+    <!-- GIF: wrzuć plik masło.gif do repo obok index.html -->
+    <img class="final-gif" src="masło.gif" alt="masło gif" />
+
     <p>Najlepsza decyzja ever 😘</p>
   </div>
 
@@ -144,31 +163,41 @@
     "Kliknij zielone, proszę 💚"
   ];
 
+  function clamp(n, min, max) {
+    return Math.max(min, Math.min(max, n));
+  }
+
   function noClick() {
     noIndex++;
 
     const yesBtn = document.getElementById("yes");
     const noBtn  = document.getElementById("no");
+    const box    = document.querySelector(".buttons");
 
-    // 1–9: rośnie TAK + ucieka NIE
+    // 1–9: rośnie TAK + ucieka NIE, ale NIE ma zawsze być widoczne (z-index)
     if (noIndex < 10) {
       scale += 0.25;
       yesBtn.style.transform = `scale(${scale})`;
 
       noBtn.textContent = noTexts[noIndex % noTexts.length];
 
-      // losowe miejsce (żeby nie uciekło poza kontener za mocno)
-      const maxX = 240;
-      const maxY = 160;
-      noBtn.style.left = Math.random() * maxX + "px";
-      noBtn.style.top  = Math.random() * maxY + "px";
+      // losowanie pozycji w obrębie kontenera (bez uciekania poza)
+      const rect = box.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      const maxX = rect.width  - noRect.width  - 10;
+      const maxY = rect.height - noRect.height - 10;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = clamp(x, 10, maxX) + "px";
+      noBtn.style.top  = clamp(y, 10, maxY) + "px";
     }
-    // 10: NIE znika, TAK fullscreen
+    // 10: NIE znika, TAK przejmuje cały ekran
     else {
       noBtn.style.display = "none";
       yesBtn.classList.add("fullscreen");
-
-      // małe wibracje już przy przejęciu ekranu (opcjonalnie)
       vibrate([40, 40, 40]);
     }
   }
@@ -178,7 +207,7 @@
     vibrate([120, 60, 120, 60, 180]);
 
     // serduszka
-    burstHearts(40);
+    burstHearts(45);
 
     // przejście na stronę końcową po chwili
     setTimeout(() => {
@@ -193,16 +222,15 @@
     } catch (e) {}
   }
 
-  function burstHearts(count = 30) {
+  function burstHearts(count = 50) {
     const hearts = ["💖","💘","💗","💓","💕","❤️","😍"];
     for (let i = 0; i < count; i++) {
       const el = document.createElement("div");
       el.className = "heart";
       el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
 
-      // start x (losowo po szerokości)
-      const x = Math.random() * 100; // vw
-      el.style.left = x + "vw";
+      // start x losowo po szerokości ekranu
+      el.style.left = (Math.random() * 100) + "vw";
 
       // losowy dryf w bok
       const dx = (Math.random() * 60 - 30) + "vw";
