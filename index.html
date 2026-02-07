@@ -52,8 +52,10 @@
       font-size: 22px;
       transition: transform 0.2s;
       position: absolute;
-      left: 30px;
-      top: 40px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      transform-origin: center center;
       z-index: 1;
     }
 
@@ -122,9 +124,10 @@
   </div>
 
   <div class="container hidden" id="page2">
-    <h1>WOOOO!! Kocham Cię 🥰❤️</h1>
-
+    
     <img class="final-gif" src="IMG_2072.gif" alt="masło gif" />
+    
+    <h1>WOOOO!! Kocham Cię 🥰❤️</h1>
 
     <p>Najlepsza decyzja ever 😘</p>
   </div>
@@ -167,14 +170,12 @@
     const noBtn  = document.getElementById("no");
     const box    = document.querySelector(".buttons");
 
-    // 1–9: rośnie TAK + ucieka NIE, ale NIE ma zawsze być widoczne (z-index)
     if (noIndex < 10) {
       scale += 0.25;
-      yesBtn.style.transform = `scale(${scale})`;
+      yesBtn.style.transform = `translate(-50%, -50%) scale(${scale})`;
 
       noBtn.textContent = noTexts[noIndex % noTexts.length];
 
-      // losowanie pozycji w obrębie kontenera (bez uciekania poza)
       const rect = box.getBoundingClientRect();
       const noRect = noBtn.getBoundingClientRect();
 
@@ -187,7 +188,6 @@
       noBtn.style.left = clamp(x, 10, maxX) + "px";
       noBtn.style.top  = clamp(y, 10, maxY) + "px";
     }
-    // 10: NIE znika, TAK przejmuje cały ekran
     else {
       noBtn.style.display = "none";
       yesBtn.classList.add("fullscreen");
@@ -196,13 +196,10 @@
   }
 
   function yesClick() {
-    // wibracja po kliknięciu TAK
     vibrate([120, 60, 120, 60, 180]);
 
-    // serduszka
     burstHearts(45);
 
-    // przejście na stronę końcową po chwili
     setTimeout(() => {
       document.getElementById("page1").classList.add("hidden");
       document.getElementById("page2").classList.remove("hidden");
@@ -222,14 +219,11 @@
       el.className = "heart";
       el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
 
-      // start x losowo po szerokości ekranu
       el.style.left = (Math.random() * 100) + "vw";
 
-      // losowy dryf w bok
       const dx = (Math.random() * 60 - 30) + "vw";
       el.style.setProperty("--dx", dx);
 
-      // losowa wielkość i czas
       el.style.fontSize = (16 + Math.random() * 28) + "px";
       el.style.animationDuration = (1.8 + Math.random() * 1.6) + "s";
 
